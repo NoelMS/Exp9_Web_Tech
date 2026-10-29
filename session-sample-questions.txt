@@ -1,0 +1,501 @@
+// ---- Q1. Student Database (CollegeDB.students) ----
+CollegeDB> db.students.drop()
+true
+CollegeDB> db.students.insertMany([
+...   { rollNo: 101, name: "Arun", department: "CSE", age: 20, mark: 85 },
+...   { rollNo: 102, name: "Priya", department: "IT", age: 21, mark: 92 },
+...   { rollNo: 103, name: "Kumar", department: "CSE", age: 19, mark: 78 },
+...   { rollNo: 104, name: "Divya", department: "ECE", age: 20, mark: 88 },
+...   { rollNo: 105, name: "Ravi", department: "CSE", age: 22, mark: 67 }
+... ])
+{
+  acknowledged: true,
+  insertedIds: {
+    '0': ObjectId('6ae3848ca549d6e432cf8b1c'),
+    '1': ObjectId('6ae3848ca549d6e432cf8b1d'),
+    '2': ObjectId('6ae3848ca549d6e432cf8b1e'),
+    '3': ObjectId('6ae3848ca549d6e432cf8b1f'),
+    '4': ObjectId('6ae3848ca549d6e432cf8b20')
+  }
+}
+CollegeDB> db.students.find({ rollNo: 103 })
+[
+  {
+    _id: ObjectId('6ae3848ca549d6e432cf8b1e'),
+    rollNo: 103,
+    name: 'Kumar',
+    department: 'CSE',
+    age: 19,
+    mark: 78
+  }
+]
+CollegeDB> db.students.find({ mark: { $gt: 80 } })
+[
+  {
+    _id: ObjectId('6ae3848ca549d6e432cf8b1c'),
+    rollNo: 101,
+    name: 'Arun',
+    department: 'CSE',
+    age: 20,
+    mark: 85
+  },
+  {
+    _id: ObjectId('6ae3848ca549d6e432cf8b1d'),
+    rollNo: 102,
+    name: 'Priya',
+    department: 'IT',
+    age: 21,
+    mark: 92
+  },
+  {
+    _id: ObjectId('6ae3848ca549d6e432cf8b1f'),
+    rollNo: 104,
+    name: 'Divya',
+    department: 'ECE',
+    age: 20,
+    mark: 88
+  }
+]
+CollegeDB> db.students.updateOne({ rollNo: 105 }, { $set: { mark: 72 } })
+{
+  acknowledged: true,
+  insertedId: null,
+  matchedCount: 1,
+  modifiedCount: 1,
+  upsertedCount: 0
+}
+CollegeDB> db.students.deleteOne({ rollNo: 104 })
+{ acknowledged: true, deletedCount: 1 }
+
+// ---- Q2. Employee Database (EmployeeDB.employees) ----
+EmployeeDB> db.dropDatabase()
+{ ok: 1, dropped: 'EmployeeDB' }
+EmployeeDB> db.employees.insertMany([
+...   { empId: 1, name: "Meena", department: "HR", salary: 52000, experience: 6 },
+...   { empId: 2, name: "Suresh", department: "IT", salary: 78000, experience: 9 },
+...   { empId: 3, name: "Lakshmi", department: "IT", salary: 39000, experience: 2 },
+...   { empId: 4, name: "Rahul", department: "Finance", salary: 45000, experience: 4 },
+...   { empId: 5, name: "Anita", department: "IT", salary: 61000, experience: 7 }
+... ])
+{
+  acknowledged: true,
+  insertedIds: {
+    '0': ObjectId('6ae38494b6c0c10f44f2e52d'),
+    '1': ObjectId('6ae38494b6c0c10f44f2e52e'),
+    '2': ObjectId('6ae38494b6c0c10f44f2e52f'),
+    '3': ObjectId('6ae38494b6c0c10f44f2e530'),
+    '4': ObjectId('6ae38494b6c0c10f44f2e531')
+  }
+}
+EmployeeDB> db.employees.find({ salary: { $gt: 40000 } })
+[
+  {
+    _id: ObjectId('6ae38494b6c0c10f44f2e52d'),
+    empId: 1,
+    name: 'Meena',
+    department: 'HR',
+    salary: 52000,
+    experience: 6
+  },
+  {
+    _id: ObjectId('6ae38494b6c0c10f44f2e52e'),
+    empId: 2,
+    name: 'Suresh',
+    department: 'IT',
+    salary: 78000,
+    experience: 9
+  },
+  {
+    _id: ObjectId('6ae38494b6c0c10f44f2e530'),
+    empId: 4,
+    name: 'Rahul',
+    department: 'Finance',
+    salary: 45000,
+    experience: 4
+  },
+  {
+    _id: ObjectId('6ae38494b6c0c10f44f2e531'),
+    empId: 5,
+    name: 'Anita',
+    department: 'IT',
+    salary: 61000,
+    experience: 7
+  }
+]
+EmployeeDB> db.employees.updateOne({ empId: 3 }, { $set: { salary: 42000 } })
+{
+  acknowledged: true,
+  insertedId: null,
+  matchedCount: 1,
+  modifiedCount: 1,
+  upsertedCount: 0
+}
+EmployeeDB> db.employees.find().sort({ salary: -1 })
+[
+  {
+    _id: ObjectId('6ae38494b6c0c10f44f2e52e'),
+    empId: 2,
+    name: 'Suresh',
+    department: 'IT',
+    salary: 78000,
+    experience: 9
+  },
+  {
+    _id: ObjectId('6ae38494b6c0c10f44f2e531'),
+    empId: 5,
+    name: 'Anita',
+    department: 'IT',
+    salary: 61000,
+    experience: 7
+  },
+  {
+    _id: ObjectId('6ae38494b6c0c10f44f2e52d'),
+    empId: 1,
+    name: 'Meena',
+    department: 'HR',
+    salary: 52000,
+    experience: 6
+  },
+  {
+    _id: ObjectId('6ae38494b6c0c10f44f2e530'),
+    empId: 4,
+    name: 'Rahul',
+    department: 'Finance',
+    salary: 45000,
+    experience: 4
+  },
+  {
+    _id: ObjectId('6ae38494b6c0c10f44f2e52f'),
+    empId: 3,
+    name: 'Lakshmi',
+    department: 'IT',
+    salary: 42000,
+    experience: 2
+  }
+]
+EmployeeDB> db.employees.countDocuments({ department: "IT" })
+3
+
+// ---- Q3. Product Database (ProductDB.products) ----
+ProductDB> db.dropDatabase()
+{ ok: 1, dropped: 'ProductDB' }
+ProductDB> db.products.insertMany([
+...   { productId: 1, name: "Yoga Mat", category: "Fitness", price: 899, stock: 40 },
+...   { productId: 2, name: "Protein Powder", category: "Nutrition", price: 2499, stock: 0 },
+...   { productId: 3, name: "Resistance Bands", category: "Fitness", price: 599, stock: 25 },
+...   { productId: 4, name: "Green Tea", category: "Nutrition", price: 349, stock: 0 },
+...   { productId: 5, name: "Foam Roller", category: "Fitness", price: 1299, stock: 12 }
+... ])
+{
+  acknowledged: true,
+  insertedIds: {
+    '0': ObjectId('6ae3849c8b1e24707bcb1098'),
+    '1': ObjectId('6ae3849c8b1e24707bcb1099'),
+    '2': ObjectId('6ae3849c8b1e24707bcb109a'),
+    '3': ObjectId('6ae3849c8b1e24707bcb109b'),
+    '4': ObjectId('6ae3849c8b1e24707bcb109c')
+  }
+}
+ProductDB> db.products.find({ category: "Fitness" })
+[
+  {
+    _id: ObjectId('6ae3849c8b1e24707bcb1098'),
+    productId: 1,
+    name: 'Yoga Mat',
+    category: 'Fitness',
+    price: 899,
+    stock: 40
+  },
+  {
+    _id: ObjectId('6ae3849c8b1e24707bcb109a'),
+    productId: 3,
+    name: 'Resistance Bands',
+    category: 'Fitness',
+    price: 599,
+    stock: 25
+  },
+  {
+    _id: ObjectId('6ae3849c8b1e24707bcb109c'),
+    productId: 5,
+    name: 'Foam Roller',
+    category: 'Fitness',
+    price: 1299,
+    stock: 12
+  }
+]
+ProductDB> db.products.find({ price: { $gte: 500, $lte: 2000 } })
+[
+  {
+    _id: ObjectId('6ae3849c8b1e24707bcb1098'),
+    productId: 1,
+    name: 'Yoga Mat',
+    category: 'Fitness',
+    price: 899,
+    stock: 40
+  },
+  {
+    _id: ObjectId('6ae3849c8b1e24707bcb109a'),
+    productId: 3,
+    name: 'Resistance Bands',
+    category: 'Fitness',
+    price: 599,
+    stock: 25
+  },
+  {
+    _id: ObjectId('6ae3849c8b1e24707bcb109c'),
+    productId: 5,
+    name: 'Foam Roller',
+    category: 'Fitness',
+    price: 1299,
+    stock: 12
+  }
+]
+ProductDB> db.products.updateOne({ productId: 1 }, { $inc: { stock: 10 } })
+{
+  acknowledged: true,
+  insertedId: null,
+  matchedCount: 1,
+  modifiedCount: 1,
+  upsertedCount: 0
+}
+ProductDB> db.products.deleteMany({ stock: 0 })
+{ acknowledged: true, deletedCount: 2 }
+ProductDB> db.products.find().sort({ price: -1 }).limit(5)
+[
+  {
+    _id: ObjectId('6ae3849c8b1e24707bcb109c'),
+    productId: 5,
+    name: 'Foam Roller',
+    category: 'Fitness',
+    price: 1299,
+    stock: 12
+  },
+  {
+    _id: ObjectId('6ae3849c8b1e24707bcb1098'),
+    productId: 1,
+    name: 'Yoga Mat',
+    category: 'Fitness',
+    price: 899,
+    stock: 50
+  },
+  {
+    _id: ObjectId('6ae3849c8b1e24707bcb109a'),
+    productId: 3,
+    name: 'Resistance Bands',
+    category: 'Fitness',
+    price: 599,
+    stock: 25
+  }
+]
+
+// ---- Q4. Library Database (LibraryDB.books) ----
+LibraryDB> db.dropDatabase()
+{ ok: 1, dropped: 'LibraryDB' }
+LibraryDB> db.books.insertMany([
+...   { bookId: 1, title: "Atomic Habits", author: "James Clear", category: "Self-help", price: 499 },
+...   { bookId: 2, title: "Why We Sleep", author: "Matthew Walker", category: "Health", price: 599 },
+...   { bookId: 3, title: "Deep Work", author: "Cal Newport", category: "Self-help", price: 450 },
+...   { bookId: 4, title: "Digital Minimalism", author: "Cal Newport", category: "Self-help", price: 420 }
+... ])
+{
+  acknowledged: true,
+  insertedIds: {
+    '0': ObjectId('6ae384a60c272f6e97e4130f'),
+    '1': ObjectId('6ae384a60c272f6e97e41310'),
+    '2': ObjectId('6ae384a60c272f6e97e41311'),
+    '3': ObjectId('6ae384a60c272f6e97e41312')
+  }
+}
+LibraryDB> db.books.find({ author: "Cal Newport" })
+[
+  {
+    _id: ObjectId('6ae384a60c272f6e97e41311'),
+    bookId: 3,
+    title: 'Deep Work',
+    author: 'Cal Newport',
+    category: 'Self-help',
+    price: 450
+  },
+  {
+    _id: ObjectId('6ae384a60c272f6e97e41312'),
+    bookId: 4,
+    title: 'Digital Minimalism',
+    author: 'Cal Newport',
+    category: 'Self-help',
+    price: 420
+  }
+]
+LibraryDB> db.books.find({ category: "Health" })
+[
+  {
+    _id: ObjectId('6ae384a60c272f6e97e41310'),
+    bookId: 2,
+    title: 'Why We Sleep',
+    author: 'Matthew Walker',
+    category: 'Health',
+    price: 599
+  }
+]
+LibraryDB> db.books.updateOne({ bookId: 3 }, { $set: { price: 475 } })
+{
+  acknowledged: true,
+  insertedId: null,
+  matchedCount: 1,
+  modifiedCount: 1,
+  upsertedCount: 0
+}
+LibraryDB> db.books.find().sort({ title: 1 })
+[
+  {
+    _id: ObjectId('6ae384a60c272f6e97e4130f'),
+    bookId: 1,
+    title: 'Atomic Habits',
+    author: 'James Clear',
+    category: 'Self-help',
+    price: 499
+  },
+  {
+    _id: ObjectId('6ae384a60c272f6e97e41311'),
+    bookId: 3,
+    title: 'Deep Work',
+    author: 'Cal Newport',
+    category: 'Self-help',
+    price: 475
+  },
+  {
+    _id: ObjectId('6ae384a60c272f6e97e41312'),
+    bookId: 4,
+    title: 'Digital Minimalism',
+    author: 'Cal Newport',
+    category: 'Self-help',
+    price: 420
+  },
+  {
+    _id: ObjectId('6ae384a60c272f6e97e41310'),
+    bookId: 2,
+    title: 'Why We Sleep',
+    author: 'Matthew Walker',
+    category: 'Health',
+    price: 599
+  }
+]
+LibraryDB> db.books.countDocuments()
+4
+
+// ---- Q5. Query operations (CollegeDB.students) ----
+CollegeDB> db.students.find({ mark: { $gte: 75 } })
+[
+  {
+    _id: ObjectId('6ae3848ca549d6e432cf8b1c'),
+    rollNo: 101,
+    name: 'Arun',
+    department: 'CSE',
+    age: 20,
+    mark: 85
+  },
+  {
+    _id: ObjectId('6ae3848ca549d6e432cf8b1d'),
+    rollNo: 102,
+    name: 'Priya',
+    department: 'IT',
+    age: 21,
+    mark: 92
+  },
+  {
+    _id: ObjectId('6ae3848ca549d6e432cf8b1e'),
+    rollNo: 103,
+    name: 'Kumar',
+    department: 'CSE',
+    age: 19,
+    mark: 78
+  }
+]
+CollegeDB> db.students.find({ age: { $lt: 21 } })
+[
+  {
+    _id: ObjectId('6ae3848ca549d6e432cf8b1c'),
+    rollNo: 101,
+    name: 'Arun',
+    department: 'CSE',
+    age: 20,
+    mark: 85
+  },
+  {
+    _id: ObjectId('6ae3848ca549d6e432cf8b1e'),
+    rollNo: 103,
+    name: 'Kumar',
+    department: 'CSE',
+    age: 19,
+    mark: 78
+  }
+]
+CollegeDB> db.students.find({ department: { $in: ["CSE", "IT"] } })
+[
+  {
+    _id: ObjectId('6ae3848ca549d6e432cf8b1c'),
+    rollNo: 101,
+    name: 'Arun',
+    department: 'CSE',
+    age: 20,
+    mark: 85
+  },
+  {
+    _id: ObjectId('6ae3848ca549d6e432cf8b1d'),
+    rollNo: 102,
+    name: 'Priya',
+    department: 'IT',
+    age: 21,
+    mark: 92
+  },
+  {
+    _id: ObjectId('6ae3848ca549d6e432cf8b1e'),
+    rollNo: 103,
+    name: 'Kumar',
+    department: 'CSE',
+    age: 19,
+    mark: 78
+  },
+  {
+    _id: ObjectId('6ae3848ca549d6e432cf8b20'),
+    rollNo: 105,
+    name: 'Ravi',
+    department: 'CSE',
+    age: 22,
+    mark: 72
+  }
+]
+CollegeDB> db.students.find().sort({ mark: -1 }).limit(3)
+[
+  {
+    _id: ObjectId('6ae3848ca549d6e432cf8b1d'),
+    rollNo: 102,
+    name: 'Priya',
+    department: 'IT',
+    age: 21,
+    mark: 92
+  },
+  {
+    _id: ObjectId('6ae3848ca549d6e432cf8b1c'),
+    rollNo: 101,
+    name: 'Arun',
+    department: 'CSE',
+    age: 20,
+    mark: 85
+  },
+  {
+    _id: ObjectId('6ae3848ca549d6e432cf8b1e'),
+    rollNo: 103,
+    name: 'Kumar',
+    department: 'CSE',
+    age: 19,
+    mark: 78
+  }
+]
+CollegeDB> db.students.updateMany({ department: "CSE" }, { $set: { grade: "A" } })
+{
+  acknowledged: true,
+  insertedId: null,
+  matchedCount: 3,
+  modifiedCount: 3,
+  upsertedCount: 0
+}

@@ -1,0 +1,428 @@
+// ---- Step 2: Create and select a database ----
+CollegeDB> db.dropDatabase()
+{ ok: 1, dropped: 'CollegeDB' }
+CollegeDB> db
+CollegeDB
+
+// ---- Step 3: Create a collection ----
+CollegeDB> db.createCollection("students")
+{ ok: 1 }
+CollegeDB> show collections
+students
+
+// ---- Step 4: Insert documents ----
+CollegeDB> db.students.insertOne({
+...   rollNo: 101,
+...   name: "Arun",
+...   department: "CSE",
+...   age: 20,
+...   mark: 85
+... })
+{
+  acknowledged: true,
+  insertedId: ObjectId('6ae3846b684a6a7b3dedcf02')
+}
+CollegeDB> db.students.insertMany([
+...   { rollNo: 102, name: "Priya", department: "IT", age: 21, mark: 92 },
+...   { rollNo: 103, name: "Kumar", department: "CSE", age: 19, mark: 78 },
+...   { rollNo: 104, name: "Divya", department: "ECE", age: 20, mark: 88 },
+...   { rollNo: 105, name: "Ravi", department: "CSE", age: 22, mark: 67 }
+... ])
+{
+  acknowledged: true,
+  insertedIds: {
+    '0': ObjectId('6ae3846d4b9a3ffc66e63104'),
+    '1': ObjectId('6ae3846d4b9a3ffc66e63105'),
+    '2': ObjectId('6ae3846d4b9a3ffc66e63106'),
+    '3': ObjectId('6ae3846d4b9a3ffc66e63107')
+  }
+}
+
+// ---- Step 5: Retrieve documents ----
+CollegeDB> db.students.find()
+[
+  {
+    _id: ObjectId('6ae3846b684a6a7b3dedcf02'),
+    rollNo: 101,
+    name: 'Arun',
+    department: 'CSE',
+    age: 20,
+    mark: 85
+  },
+  {
+    _id: ObjectId('6ae3846d4b9a3ffc66e63104'),
+    rollNo: 102,
+    name: 'Priya',
+    department: 'IT',
+    age: 21,
+    mark: 92
+  },
+  {
+    _id: ObjectId('6ae3846d4b9a3ffc66e63105'),
+    rollNo: 103,
+    name: 'Kumar',
+    department: 'CSE',
+    age: 19,
+    mark: 78
+  },
+  {
+    _id: ObjectId('6ae3846d4b9a3ffc66e63106'),
+    rollNo: 104,
+    name: 'Divya',
+    department: 'ECE',
+    age: 20,
+    mark: 88
+  },
+  {
+    _id: ObjectId('6ae3846d4b9a3ffc66e63107'),
+    rollNo: 105,
+    name: 'Ravi',
+    department: 'CSE',
+    age: 22,
+    mark: 67
+  }
+]
+CollegeDB> db.students.find({ name: "Priya" })
+[
+  {
+    _id: ObjectId('6ae3846d4b9a3ffc66e63104'),
+    rollNo: 102,
+    name: 'Priya',
+    department: 'IT',
+    age: 21,
+    mark: 92
+  }
+]
+CollegeDB> db.students.findOne({ department: "CSE" })
+{
+  _id: ObjectId('6ae3846b684a6a7b3dedcf02'),
+  rollNo: 101,
+  name: 'Arun',
+  department: 'CSE',
+  age: 20,
+  mark: 85
+}
+
+// ---- Step 6: Apply conditions to queries ----
+CollegeDB> db.students.find({ mark: { $gt: 80 } })
+[
+  {
+    _id: ObjectId('6ae3846b684a6a7b3dedcf02'),
+    rollNo: 101,
+    name: 'Arun',
+    department: 'CSE',
+    age: 20,
+    mark: 85
+  },
+  {
+    _id: ObjectId('6ae3846d4b9a3ffc66e63104'),
+    rollNo: 102,
+    name: 'Priya',
+    department: 'IT',
+    age: 21,
+    mark: 92
+  },
+  {
+    _id: ObjectId('6ae3846d4b9a3ffc66e63106'),
+    rollNo: 104,
+    name: 'Divya',
+    department: 'ECE',
+    age: 20,
+    mark: 88
+  }
+]
+CollegeDB> db.students.find({
+...   age: { $gte: 20, $lte: 21 }
+... })
+[
+  {
+    _id: ObjectId('6ae3846b684a6a7b3dedcf02'),
+    rollNo: 101,
+    name: 'Arun',
+    department: 'CSE',
+    age: 20,
+    mark: 85
+  },
+  {
+    _id: ObjectId('6ae3846d4b9a3ffc66e63104'),
+    rollNo: 102,
+    name: 'Priya',
+    department: 'IT',
+    age: 21,
+    mark: 92
+  },
+  {
+    _id: ObjectId('6ae3846d4b9a3ffc66e63106'),
+    rollNo: 104,
+    name: 'Divya',
+    department: 'ECE',
+    age: 20,
+    mark: 88
+  }
+]
+CollegeDB> db.students.find({
+...   department: { $in: ["CSE", "IT"] }
+... })
+[
+  {
+    _id: ObjectId('6ae3846b684a6a7b3dedcf02'),
+    rollNo: 101,
+    name: 'Arun',
+    department: 'CSE',
+    age: 20,
+    mark: 85
+  },
+  {
+    _id: ObjectId('6ae3846d4b9a3ffc66e63104'),
+    rollNo: 102,
+    name: 'Priya',
+    department: 'IT',
+    age: 21,
+    mark: 92
+  },
+  {
+    _id: ObjectId('6ae3846d4b9a3ffc66e63105'),
+    rollNo: 103,
+    name: 'Kumar',
+    department: 'CSE',
+    age: 19,
+    mark: 78
+  },
+  {
+    _id: ObjectId('6ae3846d4b9a3ffc66e63107'),
+    rollNo: 105,
+    name: 'Ravi',
+    department: 'CSE',
+    age: 22,
+    mark: 67
+  }
+]
+CollegeDB> db.students.find({ mark: { $lt: 80 } })
+[
+  {
+    _id: ObjectId('6ae3846d4b9a3ffc66e63105'),
+    rollNo: 103,
+    name: 'Kumar',
+    department: 'CSE',
+    age: 19,
+    mark: 78
+  },
+  {
+    _id: ObjectId('6ae3846d4b9a3ffc66e63107'),
+    rollNo: 105,
+    name: 'Ravi',
+    department: 'CSE',
+    age: 22,
+    mark: 67
+  }
+]
+
+// ---- Step 7: Update documents ----
+CollegeDB> db.students.updateOne(
+...   { rollNo: 101 },
+...   { $set: { mark: 90 } }
+... )
+{
+  acknowledged: true,
+  insertedId: null,
+  matchedCount: 1,
+  modifiedCount: 1,
+  upsertedCount: 0
+}
+CollegeDB> db.students.updateMany(
+...   { department: "CSE" },
+...   { $inc: { mark: 5 } }
+... )
+{
+  acknowledged: true,
+  insertedId: null,
+  matchedCount: 3,
+  modifiedCount: 3,
+  upsertedCount: 0
+}
+CollegeDB> db.students.find()
+[
+  {
+    _id: ObjectId('6ae3846b684a6a7b3dedcf02'),
+    rollNo: 101,
+    name: 'Arun',
+    department: 'CSE',
+    age: 20,
+    mark: 95
+  },
+  {
+    _id: ObjectId('6ae3846d4b9a3ffc66e63104'),
+    rollNo: 102,
+    name: 'Priya',
+    department: 'IT',
+    age: 21,
+    mark: 92
+  },
+  {
+    _id: ObjectId('6ae3846d4b9a3ffc66e63105'),
+    rollNo: 103,
+    name: 'Kumar',
+    department: 'CSE',
+    age: 19,
+    mark: 83
+  },
+  {
+    _id: ObjectId('6ae3846d4b9a3ffc66e63106'),
+    rollNo: 104,
+    name: 'Divya',
+    department: 'ECE',
+    age: 20,
+    mark: 88
+  },
+  {
+    _id: ObjectId('6ae3846d4b9a3ffc66e63107'),
+    rollNo: 105,
+    name: 'Ravi',
+    department: 'CSE',
+    age: 22,
+    mark: 72
+  }
+]
+
+// ---- Step 8: Delete documents ----
+CollegeDB> db.students.deleteOne({ rollNo: 105 })
+{ acknowledged: true, deletedCount: 1 }
+CollegeDB> db.students.deleteMany({
+...   mark: { $lt: 70 }
+... })
+{ acknowledged: true, deletedCount: 0 }
+CollegeDB> db.students.find()
+[
+  {
+    _id: ObjectId('6ae3846b684a6a7b3dedcf02'),
+    rollNo: 101,
+    name: 'Arun',
+    department: 'CSE',
+    age: 20,
+    mark: 95
+  },
+  {
+    _id: ObjectId('6ae3846d4b9a3ffc66e63104'),
+    rollNo: 102,
+    name: 'Priya',
+    department: 'IT',
+    age: 21,
+    mark: 92
+  },
+  {
+    _id: ObjectId('6ae3846d4b9a3ffc66e63105'),
+    rollNo: 103,
+    name: 'Kumar',
+    department: 'CSE',
+    age: 19,
+    mark: 83
+  },
+  {
+    _id: ObjectId('6ae3846d4b9a3ffc66e63106'),
+    rollNo: 104,
+    name: 'Divya',
+    department: 'ECE',
+    age: 20,
+    mark: 88
+  }
+]
+
+// ---- Step 9: Sort and limit query results ----
+CollegeDB> db.students.find().sort({ mark: -1 })
+[
+  {
+    _id: ObjectId('6ae3846b684a6a7b3dedcf02'),
+    rollNo: 101,
+    name: 'Arun',
+    department: 'CSE',
+    age: 20,
+    mark: 95
+  },
+  {
+    _id: ObjectId('6ae3846d4b9a3ffc66e63104'),
+    rollNo: 102,
+    name: 'Priya',
+    department: 'IT',
+    age: 21,
+    mark: 92
+  },
+  {
+    _id: ObjectId('6ae3846d4b9a3ffc66e63106'),
+    rollNo: 104,
+    name: 'Divya',
+    department: 'ECE',
+    age: 20,
+    mark: 88
+  },
+  {
+    _id: ObjectId('6ae3846d4b9a3ffc66e63105'),
+    rollNo: 103,
+    name: 'Kumar',
+    department: 'CSE',
+    age: 19,
+    mark: 83
+  }
+]
+CollegeDB> db.students.find()
+...   .sort({ mark: -1 })
+...   .limit(3)
+[
+  {
+    _id: ObjectId('6ae3846b684a6a7b3dedcf02'),
+    rollNo: 101,
+    name: 'Arun',
+    department: 'CSE',
+    age: 20,
+    mark: 95
+  },
+  {
+    _id: ObjectId('6ae3846d4b9a3ffc66e63104'),
+    rollNo: 102,
+    name: 'Priya',
+    department: 'IT',
+    age: 21,
+    mark: 92
+  },
+  {
+    _id: ObjectId('6ae3846d4b9a3ffc66e63106'),
+    rollNo: 104,
+    name: 'Divya',
+    department: 'ECE',
+    age: 20,
+    mark: 88
+  }
+]
+
+// ---- Step 10: Count documents ----
+CollegeDB> db.students.countDocuments()
+4
+CollegeDB> db.students.countDocuments({
+...   department: "CSE"
+... })
+2
+
+// ---- Step 11: Display database information ----
+CollegeDB> show dbs
+CollegeDB  40.00 KiB
+admin      40.00 KiB
+config     60.00 KiB
+local      40.00 KiB
+CollegeDB> db.stats()
+{
+  db: 'CollegeDB',
+  collections: Long('1'),
+  views: Long('0'),
+  objects: Long('4'),
+  avgObjSize: 88.5,
+  dataSize: 354,
+  storageSize: 20480,
+  indexes: Long('1'),
+  indexSize: 20480,
+  totalSize: 40960,
+  scaleFactor: Long('1'),
+  fsUsedSize: 842678398976,
+  fsTotalSize: 1000187359232,
+  ok: 1
+}
+CollegeDB> db.students.countDocuments()
+4

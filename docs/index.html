@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Vitality Now | Ex 9 Working with MongoDB using Shell Commands</title><style>
+:root{--forest:#1b3823;--leaf:#2c5e3b;--sprout:#4ca165;--mint:#e8f5e9;--ink:#1f2a22;--clay:#b8561f}
+*{box-sizing:border-box;margin:0;padding:0;font-family:Georgia,Garamond,serif}
+body{background:var(--mint);color:var(--ink);line-height:1.55}
+header{background:linear-gradient(var(--forest),var(--leaf));color:#fff;padding:26px 24px 22px}
+header .logo{letter-spacing:5px;font-weight:bold;font-size:1.6rem}
+header p{color:#d9ead3;font-style:italic;margin-top:4px}
+main{max-width:940px;margin:26px auto;padding:0 16px}
+h1{color:var(--leaf);font-size:1.5rem;margin-bottom:6px}
+h2{color:var(--leaf);margin:30px 0 10px;font-size:1.2rem;border-bottom:2px solid #c5dcc9;padding-bottom:4px}
+.note{background:#fff7e8;border-left:4px solid var(--clay);padding:10px 14px;margin:16px 0;border-radius:0 6px 6px 0}
+pre{background:#1a1a1a;color:#e6e6e6;padding:14px;border-radius:8px;overflow-x:auto;font:13px/1.45 Consolas,'Courier New',monospace;margin:8px 0}
+pre code{font-family:inherit}
+.file{font:bold 13px Consolas,monospace;color:var(--leaf);margin-top:14px}
+figure{margin:14px 0}
+figure img{max-width:100%;border:1px solid #9db8a2;border-radius:8px;background:#fff}
+figcaption{font-size:.9rem;color:#4a5a4e;margin-top:4px}
+footer{text-align:center;padding:24px;color:#4a5a4e;font-size:.9rem}
+a{color:var(--leaf)}
+a:focus-visible{outline:3px solid var(--clay);outline-offset:2px}
+</style></head>
+<body><header><div class="logo">VITALITY NOW</div><p>Health &amp; Wellness Blog &mdash; Web Technology Lab</p></header>
+<main><h1>Ex. No. 9 &ndash; Working with MongoDB using Shell Commands</h1><p>Database, collection, insert, find, update, delete, sort, limit and count operations in <code>mongosh</code> on the CollegeDB database.</p>
+<div class="note">This is a server-side exercise, so GitHub Pages can only show the source and the output captured from a real local run (Node.js, MongoDB 8.2 and mongosh on the author's machine).</div>
+<h2>Source code</h2><div class="file">sample-commands.js</div><pre><code>// Run line by line in mongosh (use CollegeDB first)
+use CollegeDB
+
+// Step 2: Create and select a database
+db.dropDatabase()
+db
+
+// Step 3: Create a collection
+db.createCollection("students")
+show collections
+
+// Step 4: Insert documents
+db.students.insertOne({
+  rollNo: 101,
+  name: "Arun",
+  department: "CSE",
+  age: 20,
+  mark: 85
+})
+db.students.insertMany([
+  { rollNo: 102, name: "Priya", department: "IT", age: 21, mark: 92 },
+  { rollNo: 103, name: "Kumar", department: "CSE", age: 19, mark: 78 },
+  { rollNo: 104, name: "Divya", department: "ECE", age: 20, mark: 88 },
+  { rollNo: 105, name: "Ravi", department: "CSE", age: 22, mark: 67 }
+])
+
+// Step 5: Retrieve documents
+db.students.find()
+db.students.find({ name: "Priya" })
+db.students.findOne({ department: "CSE" })
+
+// Step 6: Apply conditions to queries
+db.students.find({ mark: { $gt: 80 } })
+db.students.find({
+  age: { $gte: 20, $lte: 21 }
+})
+db.students.find({
+  department: { $in: ["CSE", "IT"] }
+})
+db.students.find({ mark: { $lt: 80 } })
+
+// Step 7: Update documents
+db.students.updateOne(
+  { rollNo: 101 },
+  { $set: { mark: 90 } }
+)
+db.students.updateMany(
+  { department: "CSE" },
+  { $inc: { mark: 5 } }
+)
+db.students.find()
+
+// Step 8: Delete documents
+db.students.deleteOne({ rollNo: 105 })
+db.students.deleteMany({
+  mark: { $lt: 70 }
+})
+db.students.find()
+
+// Step 9: Sort and limit query results
+db.students.find().sort({ mark: -1 })
+db.students.find()
+  .sort({ mark: -1 })
+  .limit(3)
+
+// Step 10: Count documents
+db.students.countDocuments()
+db.students.countDocuments({
+  department: "CSE"
+})
+
+// Step 11: Display database information
+show dbs
+db.stats()
+db.students.countDocuments()
+</code></pre>
+<div class="file">sample-questions.js</div><pre><code>// Solutions to the sample questions, run in mongosh
+
+// Q1. Student Database (CollegeDB.students)
+db.students.drop()
+db.students.insertMany([
+  { rollNo: 101, name: "Arun", department: "CSE", age: 20, mark: 85 },
+  { rollNo: 102, name: "Priya", department: "IT", age: 21, mark: 92 },
+  { rollNo: 103, name: "Kumar", department: "CSE", age: 19, mark: 78 },
+  { rollNo: 104, name: "Divya", department: "ECE", age: 20, mark: 88 },
+  { rollNo: 105, name: "Ravi", department: "CSE", age: 22, mark: 67 }
+])
+db.students.find({ rollNo: 103 })
+db.students.find({ mark: { $gt: 80 } })
+db.students.updateOne({ rollNo: 105 }, { $set: { mark: 72 } })
+db.students.deleteOne({ rollNo: 104 })
+
+// Q2. Employee Database (EmployeeDB.employees)
+db.dropDatabase()
+db.employees.insertMany([
+  { empId: 1, name: "Meena", department: "HR", salary: 52000, experience: 6 },
+  { empId: 2, name: "Suresh", department: "IT", salary: 78000, experience: 9 },
+  { empId: 3, name: "Lakshmi", department: "IT", salary: 39000, experience: 2 },
+  { empId: 4, name: "Rahul", department: "Finance", salary: 45000, experience: 4 },
+  { empId: 5, name: "Anita", department: "IT", salary: 61000, experience: 7 }
+])
+db.employees.find({ salary: { $gt: 40000 } })
+db.employees.updateOne({ empId: 3 }, { $set: { salary: 42000 } })
+db.employees.find().sort({ salary: -1 })
+db.employees.countDocuments({ department: "IT" })
+
+// Q3. Product Database (ProductDB.products)
+db.dropDatabase()
+db.products.insertMany([
+  { productId: 1, name: "Yoga Mat", category: "Fitness", price: 899, stock: 40 },
+  { productId: 2, name: "Protein Powder", category: "Nutrition", price: 2499, stock: 0 },
+  { productId: 3, name: "Resistance Bands", category: "Fitness", price: 599, stock: 25 },
+  { productId: 4, name: "Green Tea", category: "Nutrition", price: 349, stock: 0 },
+  { productId: 5, name: "Foam Roller", category: "Fitness", price: 1299, stock: 12 }
+])
+db.products.find({ category: "Fitness" })
+db.products.find({ price: { $gte: 500, $lte: 2000 } })
+db.products.updateOne({ productId: 1 }, { $inc: { stock: 10 } })
+db.products.deleteMany({ stock: 0 })
+db.products.find().sort({ price: -1 }).limit(5)
+
+// Q4. Library Database (LibraryDB.books)
+db.dropDatabase()
+db.books.insertMany([
+  { bookId: 1, title: "Atomic Habits", author: "James Clear", category: "Self-help", price: 499 },
+  { bookId: 2, title: "Why We Sleep", author: "Matthew Walker", category: "Health", price: 599 },
+  { bookId: 3, title: "Deep Work", author: "Cal Newport", category: "Self-help", price: 450 },
+  { bookId: 4, title: "Digital Minimalism", author: "Cal Newport", category: "Self-help", price: 420 }
+])
+db.books.find({ author: "Cal Newport" })
+db.books.find({ category: "Health" })
+db.books.updateOne({ bookId: 3 }, { $set: { price: 475 } })
+db.books.find().sort({ title: 1 })
+db.books.countDocuments()
+
+// Q5. Query operations (CollegeDB.students)
+db.students.find({ mark: { $gte: 75 } })
+db.students.find({ age: { $lt: 21 } })
+db.students.find({ department: { $in: ["CSE", "IT"] } })
+db.students.find().sort({ mark: -1 }).limit(3)
+db.students.updateMany({ department: "CSE" }, { $set: { grade: "A" } })
+</code></pre>
+<h2>Output</h2><figure><img src="img/01.png" alt="mongosh session 01"><figcaption>mongosh session 01</figcaption></figure>
+<figure><img src="img/02.png" alt="mongosh session 02"><figcaption>mongosh session 02</figcaption></figure>
+<figure><img src="img/03.png" alt="mongosh session 03"><figcaption>mongosh session 03</figcaption></figure>
+<figure><img src="img/04.png" alt="mongosh session 04"><figcaption>mongosh session 04</figcaption></figure>
+<figure><img src="img/05.png" alt="mongosh session 05"><figcaption>mongosh session 05</figcaption></figure>
+<figure><img src="img/06.png" alt="mongosh session 06"><figcaption>mongosh session 06</figcaption></figure>
+<figure><img src="img/07.png" alt="mongosh session 07"><figcaption>mongosh session 07</figcaption></figure>
+<figure><img src="img/08.png" alt="mongosh session 08"><figcaption>mongosh session 08</figcaption></figure>
+<figure><img src="img/09.png" alt="mongosh session 09"><figcaption>mongosh session 09</figcaption></figure>
+<figure><img src="img/10.png" alt="mongosh session 10"><figcaption>mongosh session 10</figcaption></figure>
+<figure><img src="img/11.png" alt="mongosh session 11"><figcaption>mongosh session 11</figcaption></figure>
+<figure><img src="img/12.png" alt="mongosh session 12"><figcaption>mongosh session 12</figcaption></figure>
+<figure><img src="img/13.png" alt="mongosh session 13"><figcaption>mongosh session 13</figcaption></figure>
+<figure><img src="img/14.png" alt="mongosh session 14"><figcaption>mongosh session 14</figcaption></figure>
+<figure><img src="img/15.png" alt="mongosh session 15"><figcaption>mongosh session 15</figcaption></figure>
+<figure><img src="img/16.png" alt="mongosh session 16"><figcaption>mongosh session 16</figcaption></figure>
+<figure><img src="img/17.png" alt="mongosh session 17"><figcaption>mongosh session 17</figcaption></figure>
+<figure><img src="img/18.png" alt="mongosh session 18"><figcaption>mongosh session 18</figcaption></figure>
+<figure><img src="img/19.png" alt="mongosh session 19"><figcaption>mongosh session 19</figcaption></figure>
+<figure><img src="img/20.png" alt="mongosh session 20"><figcaption>mongosh session 20</figcaption></figure>
+<figure><img src="img/21.png" alt="mongosh session 21"><figcaption>mongosh session 21</figcaption></figure>
+<figure><img src="img/22.png" alt="mongosh session 22"><figcaption>mongosh session 22</figcaption></figure>
+<figure><img src="img/23.png" alt="mongosh session 23"><figcaption>mongosh session 23</figcaption></figure>
+<figure><img src="img/24.png" alt="mongosh session 24"><figcaption>mongosh session 24</figcaption></figure>
+<figure><img src="img/25.png" alt="mongosh session 25"><figcaption>mongosh session 25</figcaption></figure>
+<p style="margin-top:24px"><a href="https://github.com/NoelMS/Exp9_Web_Tech">View the repository on GitHub</a></p></main>
+<footer>Vitality Now &middot; Web Technology Lab &middot; Ex. 9</footer></body></html>
